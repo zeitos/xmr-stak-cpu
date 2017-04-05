@@ -3,3 +3,7 @@ obj/
 xmr-stak-cpu.layout
 xmr-stak-cpu.depend
 config-debug.txt
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile

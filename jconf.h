@@ -11,8 +11,7 @@ public:
 		return oInst;
 	};
 
-	bool parse_config(const char* sFilename);
-
+	
 	struct thd_cfg {
 		bool bDoubleMode;
 		bool bNoPrefetch;

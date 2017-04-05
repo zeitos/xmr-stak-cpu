@@ -22,7 +22,7 @@ if("${CMAKE_BUILD_TYPE}" STREQUAL "")
     set(CMAKE_BUILD_TYPE RELEASE)
 endif()
 
-set(CMAKE_C_FLAGS "-DNDEBUG -march=westmere -O3 -m64 -s")
+set(CMAKE_C_FLAGS "-DNDEBUG -march=westmere -O3 -m64 ")
 set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -std=c++11")
 
 set(CMAKE_EXE_LINKER_FLAGS_RELSEASE "")

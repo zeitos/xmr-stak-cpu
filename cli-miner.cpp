@@ -54,6 +54,7 @@ void win_exit() { return; }
 
 void do_benchmark();
 
+
 int main(int argc, char *argv[])
 {
 #ifndef CONF_NO_TLS
@@ -65,36 +66,27 @@ int main(int argc, char *argv[])
 	OpenSSL_add_all_digests();
 #endif
 
-	const char* sFilename = "config.txt";
 	bool benchmark_mode = false;
 
 	if(argc >= 2)
 	{
 		if(strcmp(argv[1], "-h") == 0)
 		{
-			printer::inst()->print_msg(L0, "Usage %s [CONFIG FILE]", argv[0]);
+			printer::inst()->print_msg(L0, "Usage %s", argv[0]);
 			win_exit();
 			return 0;
 		}
 
-		if(argc >= 3 && strcasecmp(argv[1], "-c") == 0)
-		{
-			sFilename = argv[2];
-		}
 		else if(argc >= 3 && strcasecmp(argv[1], "benchmark_mode") == 0)
 		{
-			sFilename = argv[2];
+
 			benchmark_mode = true;
 		}
-		else
-			sFilename = argv[1];
 	}
 
-	if(!jconf::inst()->parse_config(sFilename))
-	{
-		win_exit();
-		return 0;
-	}
+        printer::inst()->print_msg(L0, "Using environment variables..");
+        
+    
 
 	if (!minethd::self_test())
 	{
@@ -109,14 +101,6 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
-	if(jconf::inst()->GetHttpdPort() != 0)
-	{
-		if (!httpd::inst()->start_daemon())
-		{
-			win_exit();
-			return 0;
-		}
-	}
 
 	printer::inst()->print_str("-------------------------------------------------------------------\n");
 	printer::inst()->print_str("XMR-Stak-CPU mining software, CPU Version.\n");
@@ -131,8 +115,6 @@ int main(int argc, char *argv[])
 	printer::inst()->print_str("'c' - connection\n");
 	printer::inst()->print_str("-------------------------------------------------------------------\n");
 
-	if(strlen(jconf::inst()->GetOutputFile()) != 0)
-		printer::inst()->open_logfile(jconf::inst()->GetOutputFile());
 
 	executor::inst()->ex_start();
 

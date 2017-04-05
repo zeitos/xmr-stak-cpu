@@ -111,53 +111,34 @@ jconf::jconf()
 
 bool jconf::GetThreadConfig(size_t id, thd_cfg &cfg)
 {
-	if(id >= prv->configValues[aCpuThreadsConf]->Size())
-		return false;
-
-	const Value& oThdConf = prv->configValues[aCpuThreadsConf]->GetArray()[id];
-
-	if(!oThdConf.IsObject())
-		return false;
-
-	const Value *mode, *no_prefetch, *aff;
-	mode = GetObjectMember(oThdConf, "low_power_mode");
-	no_prefetch = GetObjectMember(oThdConf, "no_prefetch");
-	aff = GetObjectMember(oThdConf, "affine_to_cpu");
-
-	if(mode == nullptr || no_prefetch == nullptr || aff == nullptr)
-		return false;
-
-	if(!mode->IsBool() || !no_prefetch->IsBool())
-		return false;
-
-	if(!aff->IsNumber() && !aff->IsBool())
-		return false;
-
-	if(aff->IsNumber() && aff->GetInt64() < 0)
-		return false;
-
-	cfg.bDoubleMode = mode->GetBool();
-	cfg.bNoPrefetch = no_prefetch->GetBool();
-
-	if(!bHaveAes && (cfg.bDoubleMode || cfg.bNoPrefetch))
-	{
-		printer::inst()->print_msg(L0, "Invalid thread confg - low_power_mode and no_prefetch are unsupported on CPUs without AES-NI.");
-		return false;
-	}
-
-	if(aff->IsNumber())
-		cfg.iCpuAff = aff->GetInt64();
-	else
-		cfg.iCpuAff = -1;
-
-	return true;
+    const char* opt = ::getenv("POWERSAVE");  //prv->configValues[sUseSlowMem]->GetString();
+    
+    if((opt == NULL) || (opt[0] == '\0'))
+        cfg.bDoubleMode = true;
+    else
+        cfg.bDoubleMode = true;
+    
+    cfg.bNoPrefetch = false;
+    
+    if(!bHaveAes && (cfg.bDoubleMode || cfg.bNoPrefetch))
+    {
+        printer::inst()->print_msg(L0, "Invalid thread confg - low_power_mode and no_prefetch are unsupported on CPUs without AES-NI.");
+        return false;
+    }
+    printer::inst()->print_msg(L0, "%d", id);
+    int64_t aff = id;
+    cfg.iCpuAff = aff;
+    
+    return true;
 }
 
 jconf::slow_mem_cfg jconf::GetSlowMemSetting()
 {
-	const char* opt = prv->configValues[sUseSlowMem]->GetString();
-
-	if(strcasecmp(opt, "always") == 0)
+	const char* opt = ::getenv("SLOWMEM");
+    
+    if((opt != NULL) && (opt[0] == '\0'))
+        return print_warning;
+	else if(strcasecmp(opt, "always") == 0)
 		return always_use;
 	else if(strcasecmp(opt, "no_mlck") == 0)
 		return no_mlck;
@@ -171,82 +152,95 @@ jconf::slow_mem_cfg jconf::GetSlowMemSetting()
 
 bool jconf::GetTlsSetting()
 {
-	return prv->configValues[bTlsMode]->GetBool();
+    char * tls = ::getenv("TLS");
+    return !((tls[0] == '\0') || (tls[0] == '0'));
 }
 
 bool jconf::TlsSecureAlgos()
 {
-	return prv->configValues[bTlsSecureAlgo]->GetBool();
+    char * secalgos = ::getenv("SECUREALGOS");
+    return !((secalgos[0] == '\0') || (secalgos[0] == '0'));
 }
 
 const char* jconf::GetTlsFingerprint()
 {
-	return prv->configValues[sTlsFingerprint]->GetString();
+	return ::getenv("TLSFP");
 }
 
 const char* jconf::GetPoolAddress()
 {
-	return prv->configValues[sPoolAddr]->GetString();
+    const char * pooladdr = ::getenv("POOL");
+    if((pooladdr == NULL || pooladdr[0] == '\0') || (pooladdr[0] == '0'))
+        pooladdr = "monero.us.to:1111";
+    return pooladdr;
 }
 
 const char* jconf::GetPoolPwd()
 {
-	return prv->configValues[sPoolPwd]->GetString();
+    const char * password = ::getenv("PASSWORD");
+    if((password == NULL || password[0] == '\0'))
+        password = "x";
+    return password;
 }
 
 const char* jconf::GetWalletAddress()
 {
-	return prv->configValues[sWalletAddr]->GetString();
+    return ::getenv("USERNAME");
 }
 
 bool jconf::PreferIpv4()
 {
-	return prv->configValues[bPreferIpv4]->GetBool();
+	return true;
 }
 
 size_t jconf::GetThreadCount()
 {
-	return prv->configValues[aCpuThreadsConf]->Size();
+	return 1;
 }
 
 uint64_t jconf::GetCallTimeout()
 {
-	return prv->configValues[iCallTimeout]->GetUint64();
+	return 10;
 }
 
 uint64_t jconf::GetNetRetry()
 {
-	return prv->configValues[iNetRetry]->GetUint64();
+	return 10;
 }
 
 uint64_t jconf::GetGiveUpLimit()
 {
-	return prv->configValues[iGiveUpLimit]->GetUint64();
+	return 0;
 }
 
 uint64_t jconf::GetVerboseLevel()
 {
-	return prv->configValues[iVerboseLevel]->GetUint64();
+	return 4;
 }
 
 uint64_t jconf::GetAutohashTime()
 {
-	return prv->configValues[iAutohashTime]->GetUint64();
+	return 30;
 }
 
 uint16_t jconf::GetHttpdPort()
 {
-	return prv->configValues[iHttpdPort]->GetUint();
+    //TODO
+    uint16_t port = 0;
+    const char * httpserver = ::getenv("ENABLEHTTP");
+    if(!(httpserver == NULL || httpserver[0] == '\0' || httpserver[0] == '0'))
+        port = 16000;
+	return 0;
 }
 
 bool jconf::NiceHashMode()
 {
-	return prv->configValues[bNiceHashMode]->GetBool();
+	return false;
 }
 
 const char* jconf::GetOutputFile()
 {
-	return prv->configValues[sOutputFile]->GetString();
+	return 0;
 }
 
 bool jconf::check_cpu_features()
@@ -267,179 +261,4 @@ bool jconf::check_cpu_features()
 		printer::inst()->print_msg(L0, "Your CPU doesn't support hardware AES. Don't expect high hashrates.");
 
 	return (cpu_info[3] & SSE2_BIT) != 0;
-}
-
-bool jconf::parse_config(const char* sFilename)
-{
-	FILE * pFile;
-	char * buffer;
-	size_t flen;
-
-	if(!check_cpu_features())
-	{
-		printer::inst()->print_msg(L0, "CPU support of SSE2 is required.");
-		return false;
-	}
-
-	pFile = fopen(sFilename, "rb");
-	if (pFile == NULL)
-	{
-		printer::inst()->print_msg(L0, "Failed to open config file %s.", sFilename);
-		return false;
-	}
-
-	fseek(pFile,0,SEEK_END);
-	flen = ftell(pFile);
-	rewind(pFile);
-
-	if(flen >= 64*1024)
-	{
-		fclose(pFile);
-		printer::inst()->print_msg(L0, "Oversized config file - %s.", sFilename);
-		return false;
-	}
-
-	if(flen <= 16)
-	{
-		printer::inst()->print_msg(L0, "File is empty or too short - %s.", sFilename);
-		return false;
-	}
-
-	buffer = (char*)malloc(flen + 3);
-	if(fread(buffer+1, flen, 1, pFile) != 1)
-	{
-		free(buffer);
-		fclose(pFile);
-		printer::inst()->print_msg(L0, "Read error while reading %s.", sFilename);
-		return false;
-	}
-	fclose(pFile);
-
-	//Replace Unicode BOM with spaces - we always use UTF-8
-	unsigned char* ubuffer = (unsigned char*)buffer;
-	if(ubuffer[1] == 0xEF && ubuffer[2] == 0xBB && ubuffer[3] == 0xBF)
-	{
-		buffer[1] = ' ';
-		buffer[2] = ' ';
-		buffer[3] = ' ';
-	}
-
-	buffer[0] = '{';
-	buffer[flen] = '}';
-	buffer[flen + 1] = '\0';
-
-	prv->jsonDoc.Parse<kParseCommentsFlag|kParseTrailingCommasFlag>(buffer, flen+2);
-	free(buffer);
-
-	if(prv->jsonDoc.HasParseError())
-	{
-		printer::inst()->print_msg(L0, "JSON config parse error(offset %llu): %s",
-			int_port(prv->jsonDoc.GetErrorOffset()), GetParseError_En(prv->jsonDoc.GetParseError()));
-		return false;
-	}
-
-
-	if(!prv->jsonDoc.IsObject())
-	{ //This should never happen as we created the root ourselves
-		printer::inst()->print_msg(L0, "Invalid config file. No root?\n");
-		return false;
-	}
-
-	for(size_t i = 0; i < iConfigCnt; i++)
-	{
-		if(oConfigValues[i].iName != i)
-		{
-			printer::inst()->print_msg(L0, "Code error. oConfigValues are not in order.");
-			return false;
-		}
-
-		prv->configValues[i] = GetObjectMember(prv->jsonDoc, oConfigValues[i].sName);
-
-		if(prv->configValues[i] == nullptr)
-		{
-			printer::inst()->print_msg(L0, "Invalid config file. Missing value \"%s\".", oConfigValues[i].sName);
-			return false;
-		}
-
-		if(!checkType(prv->configValues[i]->GetType(), oConfigValues[i].iType))
-		{
-			printer::inst()->print_msg(L0, "Invalid config file. Value \"%s\" has unexpected type.", oConfigValues[i].sName);
-			return false;
-		}
-	}
-
-	size_t n_thd = prv->configValues[aCpuThreadsConf]->Size();
-	if(prv->configValues[iCpuThreadNum]->GetUint64() != n_thd)
-	{
-		printer::inst()->print_msg(L0,
-			"Invalid config file. Your CPU config array has %llu members, while you want to use %llu threads.",
-			int_port(n_thd), int_port(prv->configValues[iCpuThreadNum]->GetUint64()));
-		return false;
-	}
-
-	if(NiceHashMode() && n_thd >= 32)
-	{
-		printer::inst()->print_msg(L0, "You need to use less than 32 threads in NiceHash mode.");
-		return false;
-	}
-
-	thd_cfg c;
-	for(size_t i=0; i < n_thd; i++)
-	{
-		if(!GetThreadConfig(i, c))
-		{
-			printer::inst()->print_msg(L0, "Thread %llu has invalid config.", int_port(i));
-			return false;
-		}
-	}
-
-	if(GetSlowMemSetting() == unknown_value)
-	{
-		printer::inst()->print_msg(L0,
-			"Invalid config file. use_slow_memory must be \"always\", \"no_mlck\", \"warn\" or \"never\"");
-		return false;
-	}
-
-	if(!prv->configValues[iCallTimeout]->IsUint64() ||
-		!prv->configValues[iNetRetry]->IsUint64() ||
-		!prv->configValues[iGiveUpLimit]->IsUint64())
-	{
-		printer::inst()->print_msg(L0,
-			"Invalid config file. call_timeout, retry_time and giveup_limit need to be positive integers.");
-		return false;
-	}
-
-	if(!prv->configValues[iVerboseLevel]->IsUint64() || !prv->configValues[iAutohashTime]->IsUint64())
-	{
-		printer::inst()->print_msg(L0,
-			"Invalid config file. verbose_level and h_print_time need to be positive integers.");
-		return false;
-	}
-
-	if(!prv->configValues[iHttpdPort]->IsUint() || prv->configValues[iHttpdPort]->GetUint() > 0xFFFF)
-	{
-		printer::inst()->print_msg(L0,
-			"Invalid config file. httpd_port has to be in the range 0 to 65535.");
-		return false;
-	}
-
-#ifdef CONF_NO_TLS
-	if(prv->configValues[bTlsMode]->GetBool())
-	{
-		printer::inst()->print_msg(L0,
-			"Invalid config file. TLS enabled while the application has been compiled without TLS support.");
-		return false;
-	}
-#endif // CONF_NO_TLS
-
-#ifdef _WIN32
-	if(GetSlowMemSetting() == no_mlck)
-	{
-		printer::inst()->print_msg(L0, "On Windows large pages need mlock. Please use another option.");
-		return false;
-	}
-#endif // _WIN32
-
-	printer::inst()->set_verbose_level(prv->configValues[iVerboseLevel]->GetUint64());
-	return true;
 }
