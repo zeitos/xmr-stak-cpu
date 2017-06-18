@@ -19,6 +19,8 @@ Releases have only the xmr-stak binary and its proper config file, they also sub
 * Install openssl and libmicrohttpd, `brew install openssl libmicrohttpd`
 * Run the binary in Terminal app 
 
+**If you can't/don't want to install the dependencies, just use the binary under xmr-stak-nohttp-nossl/ folder.
+
 ## HTML reports
 <img src="https://gist.githubusercontent.com/fireice-uk/2da301131ac01695ff79539a27b81d68/raw/4c09cdeee86f94df2e9dd86b927e64aded6184f5/xmr-stak-cpu-hashrate.png" width="260"> <img src="https://gist.githubusercontent.com/fireice-uk/2da301131ac01695ff79539a27b81d68/raw/4c09cdeee86f94df2e9dd86b927e64aded6184f5/xmr-stak-cpu-results.png" width="260"> <img src="https://gist.githubusercontent.com/fireice-uk/2da301131ac01695ff79539a27b81d68/raw/4c09cdeee86f94df2e9dd86b927e64aded6184f5/xmr-stak-cpu-connection.png" width="260">
 
