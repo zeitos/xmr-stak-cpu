@@ -2,58 +2,39 @@
 
 XMR-Stak is a universal Stratum pool miner. This is the CPU-mining version; there is also an [AMD GPU version](https://github.com/fireice-uk/xmr-stak-amd) and an [NVIDA GPU version](https://github.com/fireice-uk/xmr-stak-nvidia)
 
+## macOS
+
+This repo is intended to have valid source code to build the miner on macOS, why? 
+
+* Because it's my primary platform 
+* So that I can mine in all computers in the Apple Store (sarcasm)
+* Because I probably have too much free time
+
+
+Releases have only the xmr-stak binary and its proper config file, they also submit 1% shares to me (sorry fierce-uk). If you like this or if it's useful to you please consider mining [at my pool](http://monero.us.to).
+
+### Install dependencies:
+
+* Install [brew](https://brew.sh)
+* Install openssl and libmicrohttpd, `brew install openssl libmicrohttpd`
+* Run the binary in Terminal app 
+
 ## HTML reports
 <img src="https://gist.githubusercontent.com/fireice-uk/2da301131ac01695ff79539a27b81d68/raw/4c09cdeee86f94df2e9dd86b927e64aded6184f5/xmr-stak-cpu-hashrate.png" width="260"> <img src="https://gist.githubusercontent.com/fireice-uk/2da301131ac01695ff79539a27b81d68/raw/4c09cdeee86f94df2e9dd86b927e64aded6184f5/xmr-stak-cpu-results.png" width="260"> <img src="https://gist.githubusercontent.com/fireice-uk/2da301131ac01695ff79539a27b81d68/raw/4c09cdeee86f94df2e9dd86b927e64aded6184f5/xmr-stak-cpu-connection.png" width="260">
 
-## Usage on Windows 
-1) Edit the config.txt file to enter your pool login and password. 
-2) Double click the exe file. 
+## Compile
 
-XMR-Stak should compile on any C++11 compliant compiler. Windows compiler is assumed to be MSVC 2015 CE. MSVC build environment is not vendored.
+You should have Xcode installed, or Command-line tools (just do `xcode-select --install` in the Terminal App)
+
 ```
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA256
-
-sha1sum
-d34a0ba0dd7b3b1f900a7e02772e197e974b4a73  libeay32.dll
-2ee9966a0fc163da58408d91be36b84fa287c10b  ssleay32.dll
-a03f81d7445005e0d51e3825e67cac8413df1068  xmr-stak-cpu.exe
-98bb62cd1f3c7a11a18d6c2b1f1bd6bf4b5b41a3  xmr-stak-cpu-notls.exe
-
-
-sha3sum
-05003137a87313c81d6c348c9b96411c95d48dc22c35f36c39129747  libeay32.dll
-133c065d9ef2c93396382e2ba5d8c3ca8c6a57c6beb0159cb9a4b6c5  ssleay32.dll
-9666ae2cfa337599282615275ea05f4e6240fd571c86530583ac89aa  xmr-stak-cpu.exe
-46f633b125907feed2f16fc97dcc8402a67218809fef226a77c0aa70  xmr-stak-cpu-notls.exe
-
-date
-Sat 29 Apr 16:59:00 BST 2017
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQEcBAEBCAAGBQJZBLhQAAoJEPsk95p+1Bw0bWYH/0jtGhKqahRGaxAnLLmA9rsK
-HUsvIDkAFEshdcUK2yB32JXu4vltG2sbIb/AaY3qifFawhfMPQXGPhJ1YfWlJrI6
-icqcPlvHRo88nSfpCfRA3EOjmrNSM4uXb4/FM9ongTgqBKPkSAoQjJfnhXQfOFKb
-ULyN0xRRMuqPxnAggzqn5mwcJ1qPFnuUDjcBssnHw21P/p72qrMK/pMp1LeGMpGZ
-+kzr7rS2wko7isJuMouddCK3rypxeIry2XfLehRqguhfXLw9Xi+HNmBCY+76bYWi
-xXl2Nm/u3cPP/eQVrZz5H8eACwIv+LL1EV+9uLanWUa+IO5hHr3KElvKNKD6vN0=
-=vGQV
------END PGP SIGNATURE-----
-```
-
-## Compile on Linux (Debian-based distros)
-
-### GNU Compiler
-```
-    sudo apt-get install libmicrohttpd-dev libssl-dev cmake build-essential
+    brew install libmicrohttpd openssl cmake
     cmake .
-    make install
+    make
 ```
 
-- GCC version 5.1 or higher is required for full C++11 support. CMake release compile scripts, as well as CodeBlocks build environment for debug builds is included.
+the miner binary will be under bin/ folder.
 
-### To do a static build for a system without gcc 5.1+
+### To do a static build
 ```
     cmake -DCMAKE_LINK_STATIC=ON .
     make install
@@ -85,6 +66,11 @@ fireice-uk:
 psychocrypt:
 ```
 43NoJVEXo21hGZ6tDG6Z3g4qimiGdJPE6GRxAmiWwm26gwr62Lqo7zRiCJFSBmbkwTGNuuES9ES5TgaVHceuYc4Y75txCTU
+```
+
+jpaulmora:
+```
+45TtdSmDY2fQSTyWTK2buRKMvFNmBMPagE3kKtTUYyWsbLEm5rB9z8sEAu1MHd5PPz1WkeRvZGBzVQceUPsAXGFJSRg8pGw
 ```
 
 ## Common Issues
