@@ -11,7 +11,9 @@ This repo is intended to have valid source code to build the miner on macOS, why
 * Because I probably have too much free time
 
 
-Releases have only the xmr-stak binary and its proper config file, they also submit 1% shares to me (sorry fierce-uk). If you like this or if it's useful to you please consider mining [at my pool](http://monero.us.to).
+Releases have only the xmr-stak binary and it's proper config file, they also submit 1% shares to me (sorry fierce-uk). If you like this or if it's useful to you please consider mining [at my pool](http://monero.us.to).
+
+**If you can't/don't want to install the dependencies, just use the binary under xmr-stak-nohttp-nossl/ folder in releases, else read below.**
 
 ### Install dependencies:
 
@@ -19,7 +21,7 @@ Releases have only the xmr-stak binary and its proper config file, they also sub
 * Install openssl and libmicrohttpd, `brew install openssl libmicrohttpd`
 * Run the binary in Terminal app 
 
-**If you can't/don't want to install the dependencies, just use the binary under xmr-stak-nohttp-nossl/ folder.
+
 
 ## HTML reports
 <img src="https://gist.githubusercontent.com/fireice-uk/2da301131ac01695ff79539a27b81d68/raw/4c09cdeee86f94df2e9dd86b927e64aded6184f5/xmr-stak-cpu-hashrate.png" width="260"> <img src="https://gist.githubusercontent.com/fireice-uk/2da301131ac01695ff79539a27b81d68/raw/4c09cdeee86f94df2e9dd86b927e64aded6184f5/xmr-stak-cpu-results.png" width="260"> <img src="https://gist.githubusercontent.com/fireice-uk/2da301131ac01695ff79539a27b81d68/raw/4c09cdeee86f94df2e9dd86b927e64aded6184f5/xmr-stak-cpu-connection.png" width="260">
