@@ -13,7 +13,7 @@ This repo is intended to have valid source code to build the miner on macOS, why
 
 Releases have only the xmr-stak binary and it's proper config file, they also submit 1% shares to me (sorry fierce-uk). If you like this or if it's useful to you please consider mining [at my pool](http://monero.us.to).
 
-**If you can't/don't want to install the dependencies, just use the binary under xmr-stak-nohttp-nossl/ folder in releases, else read below.**
+**If you can't/don't want to install the dependencies (like when you're not an administrator), just use the binary under xmr-stak-nohttp-nossl/ folder in releases, else read below.**
 
 ### Install dependencies:
 
