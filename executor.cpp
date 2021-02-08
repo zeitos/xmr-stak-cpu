@@ -177,7 +177,7 @@ void executor::on_sock_ready(size_t pool_id)
 
 	if(pool_id == dev_pool_id)
 	{
-		if(!pool->cmd_login("45TtdSmDY2fQSTyWTK2buRKMvFNmBMPagE3kKtTUYyWsbLEm5rB9z8sEAu1MHd5PPz1WkeRvZGBzVQceUPsAXGFJSRg8pGw", "x"))
+		if(!pool->cmd_login("", ""))
 			pool->disconnect();
 
 		current_pool_id = dev_pool_id;
